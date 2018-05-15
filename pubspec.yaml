@@ -1,0 +1,22 @@
+name: lekker_lokaal_app
+description: De mobiele applicatie voor handelaars van Lekker Lokaal.
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^0.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/LoginIcon.png
+    - assets/alucard.jpg
+  fonts:
+      - family: Nunito
+        fonts:
+          - asset: assets/Nunito.ttf
