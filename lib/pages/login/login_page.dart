@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
       _presenter.doLogin(user.username, user.password);
     }
     else {
-      _showSnackBar("Gelieve uw e-mailadres en wachtwoord in te vullen.");
+      _showSnackBar("Gelieve zowel uw e-mailadres als uw wachtwoord in te vullen.");
     }
   }
 
@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
 
     return Scaffold(
       appBar: new AppBar(
-        title: new Text("Lekker Lokaal"),
+        title: new Text("Lekker Lokaal", style: TextStyle(color: Colors.white)),
       ),
       key: scaffoldKey,
       backgroundColor: Colors.white,
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
 
   @override
   void OnLoginError(String error) {
-    _showSnackBar("Er is iets misgegaan. Gelieve uw netwerk te controleren of probeer uw gegevens opnieuw in te voeren.");
+    _showSnackBar("Er is iets misgegaan. Gelieve uw netwerk te controleren en uw gegevens opnieuw in te voeren.");
   }
 
   @override
