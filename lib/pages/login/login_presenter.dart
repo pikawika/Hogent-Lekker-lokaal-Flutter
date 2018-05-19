@@ -2,8 +2,8 @@ import '../../data/rest_data.dart';
 import '../../models/handelaar.dart';
 
 abstract class LoginPageContract {
-  void OnLoginSucces(Handelaar handelaar);
-  void OnLoginError(String error);
+  void onLoginSucces(Handelaar handelaar);
+  void onLoginError(String error);
 }
 
 class LoginPagePresenter {
@@ -14,7 +14,7 @@ class LoginPagePresenter {
   doLogin(String username, String password) {
     api
         .meldHandelaarAan(username, password)
-        .then((handelaar) => _view.OnLoginSucces(handelaar))
-        .catchError((onError) => _view.OnLoginError(onError.toString()));
+        .then((handelaar) => _view.onLoginSucces(handelaar))
+        .catchError((onError) => _view.onLoginError(onError.toString()));
   }
 }

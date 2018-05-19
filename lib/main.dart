@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'pages/home_page.dart';
 import 'pages/login/login_page.dart';
+import 'pages/scan_page.dart';
 
 void main() => runApp(new MyApp());
 
@@ -9,6 +10,7 @@ class MyApp extends StatelessWidget {
   final routes = <String, WidgetBuilder>{
     LoginPage.tag: (context)=>LoginPage(),
     HomePage.tag: (context)=>HomePage(),
+    ScanPage.tag: (context)=>ScanPage(),
   };
 
   @override

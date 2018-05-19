@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../data/database_helper.dart';
 import '../../models/handelaar.dart';
 import '../../models/user.dart';
+import '../home_page.dart';
+import '../scan_page.dart';
 import 'login_presenter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -11,13 +14,16 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> implements LoginPageContract {
   final scaffoldKey = new GlobalKey<ScaffoldState>();
-  final emailController = new TextEditingController();
-  final wachtwoordController = new TextEditingController();
+  var emailController;
+  var wachtwoordController;
+  final db = new DatabaseHelper();
 
   LoginPagePresenter _presenter;
 
   _LoginPageState() {
     _presenter = new LoginPagePresenter(this);
+    emailController = new TextEditingController(text: "bramwarsx@gmail.com");
+    wachtwoordController = new TextEditingController(text: "testtest");
   }
 
   void _submit() {
@@ -50,10 +56,10 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
         tag: 'hero',
         child: CircleAvatar(
             backgroundColor: Colors.transparent,
-            radius: 48.0,
+            radius: 54.0,
             child: Image.asset('assets/LoginIcon.png')));
 
-    final email = TextFormField(
+    final email = TextField(
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       controller: emailController,
@@ -64,7 +70,7 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
               OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
 
-    final password = TextFormField(
+    final password = TextField(
       autofocus: false,
       obscureText: true,
       controller: wachtwoordController,
@@ -84,9 +90,6 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
         child: MaterialButton(
           minWidth: 200.0,
           height: 42.0,
-          /*onPressed: () {
-            Navigator.of(context).pushNamed(HomePage.tag);
-          },*/
           onPressed: _submit,
           color: Colors.lightBlueAccent,
           child: Text('Meld aan', style: TextStyle(color: Colors.white)),
@@ -128,12 +131,21 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
   }
 
   @override
-  void OnLoginError(String error) {
+  void onLoginError(String error) {
     _showSnackBar("Er is iets misgegaan. Gelieve uw netwerk te controleren en uw gegevens opnieuw in te voeren.");
   }
 
   @override
-  void OnLoginSucces(Handelaar handelaar) {
-    _showSnackBar(handelaar.naam);
+  void onLoginSucces(Handelaar handelaar) async {
+
+    User user = new User(emailController.text, wachtwoordController.text);
+    User huidigeUser = await db.getUser();
+    if (huidigeUser == null)
+      await db.saveUser(user);
+    else
+      await db.updateUser(user);
+    //Navigator.of(context).pushNamed(HomePage.tag);
+    Navigator.of(context).pushNamed(ScanPage.tag);
   }
+  
 }
