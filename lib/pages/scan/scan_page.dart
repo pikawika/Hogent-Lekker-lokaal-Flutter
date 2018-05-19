@@ -4,18 +4,32 @@ import 'package:flutter/material.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
 
+import '../../models/cadeaubon.dart';
+import 'scan_presenter.dart';
+
 class ScanPage extends StatefulWidget {
   static String tag = 'scan-page';
   @override
   _ScanPageState createState() => new _ScanPageState();
 }
 
-class _ScanPageState extends State<ScanPage> {
+class _ScanPageState extends State<ScanPage> implements ScanPageContract {
   String barcode = "";
+
+  ScanPagePresenter _presenter;
+
+  _ScanPageState() {
+    _presenter = new ScanPagePresenter(this);
+  }
+
+  void _scan(String qrcode) {
+    _presenter.doScan(qrcode);
+  }
 
   @override
   initState() {
     super.initState();
+    scan();
   }
 
   @override
@@ -47,6 +61,7 @@ class _ScanPageState extends State<ScanPage> {
     try {
       String barcode = await BarcodeScanner.scan();
       setState(() => this.barcode = barcode);
+      _scan(barcode);
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
@@ -62,5 +77,16 @@ class _ScanPageState extends State<ScanPage> {
     } catch (e) {
       setState(() => this.barcode = 'Onbekende error: $e');
     }
+  }
+
+  @override
+  void onScanError(String error) {
+    setState(() => this.barcode =
+        'Er is een fout opgetreden bij het ophalen van de gegevens. Gelieve het opnieuw te proberen.');
+  }
+
+  @override
+  void onScanSucces(Cadeaubon cadeaubon) {
+    setState(() => this.barcode = cadeaubon.aanmaakDatum.toString());
   }
 }

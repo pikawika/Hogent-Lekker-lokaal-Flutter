@@ -1,21 +1,25 @@
 class Cadeaubon {
 
-  int _bestelLijnId;
-  String _naam;
-  double _prijs;
-  DateTime _aanmaakDatum;
-  int _handelaarId;
-  String _emailadres;
-  int _geldigheid;
+  final int bestelLijnId;
+  final String naam;
+  final double prijs;
+  final DateTime aanmaakDatum;
+  final int handelaarId;
+  final String emailadres;
+  final int geldigheid;
 
-  Cadeaubon(this._bestelLijnId, this._naam, this._prijs, this._aanmaakDatum, this._handelaarId, this._emailadres, this._geldigheid);
+  Cadeaubon({this.bestelLijnId, this.naam, this.prijs, this.aanmaakDatum, this.handelaarId, this.emailadres, this.geldigheid});
 
-  int get bestelLijnId => _bestelLijnId;
-  String get naam => _naam;
-  double get prijs => _prijs;
-  DateTime get aanmaakDatum => _aanmaakDatum;
-  int get handelaarId => _handelaarId;
-  String get emailadres => _emailadres;
-  int get geldigheid => _geldigheid;
+  factory Cadeaubon.fromJson(Map<String, dynamic> json) {
+    return new Cadeaubon(
+      bestelLijnId: json['bestelLijnId'],
+      naam: json['naam'],
+      prijs: json['prijs'],
+      aanmaakDatum: DateTime.parse(json['aanmaakDatum']),
+      handelaarId: json['handelaarId'],
+      emailadres: json['emailadres'],
+      geldigheid: json['geldigheid']
+    );
+  }
 
 }

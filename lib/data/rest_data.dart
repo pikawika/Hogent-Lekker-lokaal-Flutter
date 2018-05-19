@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../models/cadeaubon.dart';
 import '../models/handelaar.dart';
 
 class RestData {
@@ -16,6 +17,12 @@ class RestData {
     final response = await http.get(BASE_URL + username + "/" + password);
     final responseJson = json.decode(response.body);
     return new Handelaar.fromJson(responseJson);
+  }
+
+  Future<Cadeaubon> haalCadeaubonOp(String qrcode) async {
+    final response = await http.get(BASE_URL + qrcode);
+    final responseJson = json.decode(response.body);
+    return new Cadeaubon.fromJson(responseJson);
   }
 
 }

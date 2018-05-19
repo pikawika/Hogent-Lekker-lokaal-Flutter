@@ -3,7 +3,7 @@ import '../../data/database_helper.dart';
 import '../../models/handelaar.dart';
 import '../../models/user.dart';
 import '../home_page.dart';
-import '../scan_page.dart';
+import '../scan/scan_page.dart';
 import 'login_presenter.dart';
 
 class LoginPage extends StatefulWidget {
