@@ -26,8 +26,8 @@ class Cadeaubon {
 
   Map toJson() {
     return {
-      "handelaarid": handelaarId,
-      "geldigheid": geldigheid
+      "HandelaarId": handelaarId,
+      "Geldigheid": geldigheid
     };
   }
 

@@ -7,12 +7,12 @@ import '../models/cadeaubon.dart';
 import '../models/handelaar.dart';
 
 class RestData {
-
   static RestData _instance = new RestData.internal();
   RestData.internal();
   factory RestData() => _instance;
 
-  static const String BASE_URL = "https://testlekkerlokaal.azurewebsites.net/api/mobieleapp/";
+  static const String BASE_URL =
+      "https://testlekkerlokaal.azurewebsites.net/api/mobieleapp/";
 
   Future<Handelaar> meldHandelaarAan(String username, String password) async {
     final response = await http.get(BASE_URL + username + "/" + password);
@@ -26,9 +26,15 @@ class RestData {
     return new Cadeaubon.fromJson(responseJson);
   }
 
-  void valideerCadeaubon(Cadeaubon cadeaubon) async {
-    final message = json.encode(cadeaubon);
-    await http.put(BASE_URL + cadeaubon.bestelLijnId.toString(), body: message);
+  Future<Response> valideerCadeaubon(Cadeaubon cadeaubon) async {
+    final message = json.encode(cadeaubon.toJson());
+    final response = await http.put(
+        BASE_URL + cadeaubon.bestelLijnId.toString(),
+        headers: {
+          "Content-Type": "application/json",
+          'Accept': 'application/json'
+        },
+        body: message);
+    return response;
   }
-
 }

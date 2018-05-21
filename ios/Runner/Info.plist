@@ -47,5 +47,7 @@
 	<false/>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera permissie is noodzakelijk voor het scannen van een QR-code.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Deze applicatie wilt gezichtsherkenning gebruiken om u sneller aan te kunnen melden.</string>
 </dict>
 </plist>

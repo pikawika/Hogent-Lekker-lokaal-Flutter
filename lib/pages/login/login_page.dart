@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:local_auth/local_auth.dart';
 import '../../data/database_helper.dart';
 import '../../models/handelaar.dart';
 import '../../models/user.dart';
@@ -15,6 +18,8 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   var emailController;
   var wachtwoordController;
+  User gebruiker = new User("Lekker", "Lokaal");
+  User user;
   final db = new DatabaseHelper();
 
   LoginPagePresenter _presenter;
@@ -25,8 +30,8 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
     wachtwoordController = new TextEditingController();
   }
 
-  void _submit() {
-    User user = new User(emailController.text, wachtwoordController.text);
+  void _submit(String gebruikersnaam, String wachtwoord) {
+    user = new User(gebruikersnaam, wachtwoord);
     if (user.checkInformation) {
       _presenter.doLogin(user.username, user.password);
     } else {
@@ -42,13 +47,30 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
     ));
   }
 
-  void vulEmailIn() async {
-    User user = await db.getUser();
-    if (user != null) {
-      setState(() {
-        emailController.text = user.username;
-      });
+  Future zetGegevensKlaar() async {
+    gebruiker = await db.getUser();
+  }
+
+  void slimAanmelden() async {
+    await zetGegevensKlaar();
+    if (gebruiker != null && gebruiker.username != "Lekker") {
+      bool aanmeldenMetSmartlock = await smartlocks();
+      if (aanmeldenMetSmartlock) {
+        _submit(gebruiker.username, gebruiker.password);
+      } else {
+        setState(() {
+          emailController.text = gebruiker.username;
+        });
+      }
     }
+  }
+
+  Future<bool> smartlocks() async {
+    var localAuth = new LocalAuthentication();
+    bool didAuthenticate = await localAuth.authenticateWithBiometrics(
+        localizedReason:
+            'Gebruik uw vingerafdruk of gezicht om sneller aan te kunnen melden.');
+    return didAuthenticate;
   }
 
   @override
@@ -61,7 +83,7 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
   @override
   initState() {
     super.initState();
-    vulEmailIn();
+    slimAanmelden();
   }
 
   @override
@@ -104,7 +126,9 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
         child: MaterialButton(
           minWidth: 200.0,
           height: 42.0,
-          onPressed: _submit,
+          onPressed: () {
+            _submit(emailController.text, wachtwoordController.text);
+          },
           color: Colors.lightBlueAccent,
           child: Text('Meld aan', style: TextStyle(color: Colors.white)),
         ),
@@ -153,7 +177,6 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
 
   @override
   void onLoginSucces(Handelaar handelaar) async {
-    User user = new User(emailController.text, wachtwoordController.text);
     User huidigeUser = await db.getUser();
     if (huidigeUser == null)
       await db.saveUser(user);

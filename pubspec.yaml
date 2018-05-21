@@ -11,6 +11,7 @@ dependencies:
   path_provider: any
   barcode_scan: any
   date_format: any
+  local_auth: any
 
 dev_dependencies:
   flutter_test:

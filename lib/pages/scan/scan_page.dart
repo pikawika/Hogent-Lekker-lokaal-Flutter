@@ -34,8 +34,7 @@ class _ScanPageState extends State<ScanPage> implements ScanPageContract {
   void _manueleScan() {
     if (qrcodeController.text != null && qrcodeController.text != "") {
       _scan(qrcodeController.text);
-    }
-    else {
+    } else {
       _showSnackBar("Gelieve een QR-code in te voeren.");
     }
   }
@@ -105,8 +104,8 @@ class _ScanPageState extends State<ScanPage> implements ScanPageContract {
           height: 42.0,
           onPressed: _manueleScan,
           color: Colors.lightBlueAccent,
-          child:
-              Text('Gebruik manuele QR-code', style: TextStyle(color: Colors.white)),
+          child: Text('Gebruik manuele QR-code',
+              style: TextStyle(color: Colors.white)),
         ),
       ),
     );
@@ -121,8 +120,8 @@ class _ScanPageState extends State<ScanPage> implements ScanPageContract {
 
     return Scaffold(
       appBar: new AppBar(
-        title:
-            new Text("Lekker Lokaal", style: TextStyle(color: Colors.white)),
+        title: new Text("QR-code Scanner", style: TextStyle(color: Colors.white)),
+        iconTheme: new IconThemeData(color: Colors.white),
       ),
       key: scaffoldKey,
       backgroundColor: Colors.white,
@@ -151,12 +150,14 @@ class _ScanPageState extends State<ScanPage> implements ScanPageContract {
       _scan(barcode);
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
-        _showSnackBar('U moet deze applicatie toegang geven tot de camera van uw toestel.');
+        _showSnackBar(
+            'U moet deze applicatie toegang geven tot de camera van uw toestel.');
       } else {
         _showSnackBar('Onbekende error: $e');
       }
     } on FormatException {
-      _showSnackBar('U heeft het scannen gestopt en er is geen resultaat uit voort gekomen.');
+      _showSnackBar(
+          'U heeft het scannen gestopt en er is geen resultaat uit voort gekomen.');
     } catch (e) {
       _showSnackBar('Onbekende error: $e');
     }
@@ -164,7 +165,8 @@ class _ScanPageState extends State<ScanPage> implements ScanPageContract {
 
   @override
   void onScanError(String error) {
-    _showSnackBar('Er is een fout opgetreden bij het ophalen van de gegevens. Gelieve het opnieuw te proberen.');
+    _showSnackBar(
+        'Er is een fout opgetreden bij het ophalen van de gegevens. Gelieve het opnieuw te proberen.');
   }
 
   @override
