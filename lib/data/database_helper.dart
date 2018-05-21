@@ -5,6 +5,8 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../models/cadeaubon.dart';
+import '../models/handelaar.dart';
 import '../models/user.dart';
 
 class DatabaseHelper {
@@ -32,6 +34,11 @@ class DatabaseHelper {
   void _onCreate(Database db, int version) async {
     await db.execute(
     "CREATE TABLE User(id INTEGER PRIMARY KEY, username TEXT, password TEXT)");
+    await db.execute(
+    "CREATE TABLE Handelaar(id INTEGER PRIMARY KEY, handelaarId INTEGER, btwNummer TEXT, beschrijving TEXT, emailadres TEXT, naam TEXT)");
+    await db.execute(
+    "CREATE TABLE Cadeaubon(id INTEGER PRIMARY KEY, bestelLijnId INTEGER, naam TEXT, prijs DOUBLE, aanmaakDatum TEXT, handelaarId INTEGER, emailadres TEXT, geldigheid INTEGER, afbeelding TEXT)");
+
     print("Created tables");
   }
 
@@ -59,6 +66,60 @@ class DatabaseHelper {
       columns: ["username", "password"]);
     if (maps.length > 0)
       return new User.map(maps.first);
+    return null;
+  }
+
+  Future<int> saveHandelaar(Handelaar handelaar) async {
+    var dbClient = await db;
+    int res = await dbClient.insert("Handelaar", handelaar.toMap());
+    return res;
+  }
+
+  Future<int> updateHandelaar(Handelaar handelaar) async {
+    var dbClient = await db;
+    int res = await dbClient.update("Handelaar", handelaar.toMap());
+    return res;
+  }
+
+  Future<int> deleteHandelaar() async {
+    var dbClient = await db;
+    int res = await dbClient.delete("Handelaar");
+    return res;
+  }
+
+  Future<Handelaar> getHandelaar() async {
+    var dbClient = await db;
+    List<Map> maps = await dbClient.query("Handelaar",
+      columns: ["handelaarId", "btwNummer", "beschrijving", "emailadres", "naam"]);
+    if (maps.length > 0)
+      return new Handelaar.map(maps.first);
+    return null;
+  }
+
+  Future<int> saveCadeaubon(Cadeaubon cadeaubon) async {
+    var dbClient = await db;
+    int res = await dbClient.insert("Cadeaubon", cadeaubon.toMap());
+    return res;
+  }
+
+  Future<int> updateCadeaubon(Cadeaubon cadeaubon) async {
+    var dbClient = await db;
+    int res = await dbClient.update("Cadeaubon", cadeaubon.toMap());
+    return res;
+  }
+
+  Future<int> deleteCadeaubon() async {
+    var dbClient = await db;
+    int res = await dbClient.delete("Cadeaubon");
+    return res;
+  }
+
+  Future<Cadeaubon> getCadeaubon() async {
+    var dbClient = await db;
+    List<Map> maps = await dbClient.query("Cadeaubon",
+      columns: ["bestelLijnId", "naam", "prijs", "aanmaakDatum", "handelaarId", "emailadres", "geldigheid", "afbeelding"]);
+    if (maps.length > 0)
+      return new Cadeaubon.map(maps.first);
     return null;
   }
 

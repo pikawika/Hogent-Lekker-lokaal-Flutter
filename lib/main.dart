@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
-import 'pages/home_page.dart';
+import 'data/database_helper.dart';
+import 'pages/bon_page/bon_page.dart';
 import 'pages/login/login_page.dart';
 import 'pages/scan/scan_page.dart';
 
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
+  static final db = new DatabaseHelper();
   final routes = <String, WidgetBuilder>{
     LoginPage.tag: (context)=>LoginPage(),
-    HomePage.tag: (context)=>HomePage(),
+    BonPage.tag: (context)=>BonPage(),
     ScanPage.tag: (context)=>ScanPage(),
   };
 

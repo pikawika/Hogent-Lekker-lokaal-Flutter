@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../data/database_helper.dart';
 import '../../models/handelaar.dart';
 import '../../models/user.dart';
-import '../home_page.dart';
 import '../scan/scan_page.dart';
 import 'login_presenter.dart';
 
@@ -22,17 +21,17 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
 
   _LoginPageState() {
     _presenter = new LoginPagePresenter(this);
-    emailController = new TextEditingController(text: "bramwarsx@gmail.com");
-    wachtwoordController = new TextEditingController(text: "testtest");
+    emailController = new TextEditingController();
+    wachtwoordController = new TextEditingController();
   }
 
   void _submit() {
     User user = new User(emailController.text, wachtwoordController.text);
     if (user.checkInformation) {
       _presenter.doLogin(user.username, user.password);
-    }
-    else {
-      _showSnackBar("Gelieve zowel uw e-mailadres als uw wachtwoord in te vullen.");
+    } else {
+      _showSnackBar(
+          "Gelieve zowel uw e-mailadres als uw wachtwoord in te vullen.");
     }
   }
 
@@ -43,11 +42,26 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
     ));
   }
 
+  void vulEmailIn() async {
+    User user = await db.getUser();
+    if (user != null) {
+      setState(() {
+        emailController.text = user.username;
+      });
+    }
+  }
+
   @override
   void dispose() {
     emailController.dispose();
     wachtwoordController.dispose();
     super.dispose();
+  }
+
+  @override
+  initState() {
+    super.initState();
+    vulEmailIn();
   }
 
   @override
@@ -101,7 +115,8 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
       child:
           Text('Wachtwoord vergeten?', style: TextStyle(color: Colors.black54)),
       onPressed: () {
-        _showSnackBar("Contacteer de administrator van Lekker Lokaal om een nieuw wachtwoord aan te laten maken.");
+        _showSnackBar(
+            "Contacteer de administrator van Lekker Lokaal om een nieuw wachtwoord aan te laten maken.");
       },
     );
 
@@ -132,20 +147,23 @@ class _LoginPageState extends State<LoginPage> implements LoginPageContract {
 
   @override
   void onLoginError(String error) {
-    _showSnackBar("Er is iets misgegaan. Gelieve uw netwerk te controleren en uw gegevens opnieuw in te voeren.");
+    _showSnackBar(
+        "Er is iets misgegaan. Gelieve uw netwerk te controleren en uw gegevens opnieuw in te voeren.");
   }
 
   @override
   void onLoginSucces(Handelaar handelaar) async {
-
     User user = new User(emailController.text, wachtwoordController.text);
     User huidigeUser = await db.getUser();
     if (huidigeUser == null)
       await db.saveUser(user);
     else
       await db.updateUser(user);
-    //Navigator.of(context).pushNamed(HomePage.tag);
+    Handelaar huidigeHandelaar = await db.getHandelaar();
+    if (huidigeHandelaar == null)
+      await db.saveHandelaar(handelaar);
+    else
+      await db.updateHandelaar(handelaar);
     Navigator.of(context).pushNamed(ScanPage.tag);
   }
-  
 }

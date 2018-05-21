@@ -10,6 +10,7 @@ dependencies:
   sqflite: any
   path_provider: any
   barcode_scan: any
+  date_format: any
 
 dev_dependencies:
   flutter_test:
