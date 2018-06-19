@@ -50,7 +50,7 @@ class _BonPageState extends State<BonPage> implements BonPageContract {
   }
 
   String maakAfbeeldingURL() {
-    return "https://lekkerlokaalbralenbre.azurewebsites.net" +
+    return "https://lekkerlokaalbralenbre.azurewebsites.net/" +
         _cadeaubon.afbeelding;
   }
 
