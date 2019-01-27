@@ -1,8 +1,9 @@
-# lekker_lokaal_app
+# Welkom bij lekker lokaal - flutter app
 
-A new Flutter project.
+Dit is de flutter applicatie die hoort bij het lekker lokaal project
 
-## Getting Started
+> [Lekker lokaal project](https://github.com/pikawika/lekker-lokaal)
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+Deze flutter applicatie is gebouwd door Bram De Coninck maar de innerlijke werking is ook voor mij, Lennert, duidelijk.
+
+> [Website Bram](https://bramdeconinck.com/)
